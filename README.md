@@ -68,13 +68,12 @@ Services communicate by service name on the Docker network (e.g. `http://ollama:
 
 The MCP server uses SSE (Server-Sent Events) transport — Streamlit connects to it at `http://mcp_server:8000/sse`.
 
-```mermiad
-flowchart TD
+```mermaid
+flowchart LR
     A[User] -->|upload CSV, message| B(Streamlit)
     B --> |user message, tool| C(Ollama)
     B --> |request/execute tool| D(MCP)
     D --> |tool definition| B
     D --> |tool results| B
     C --> |tool call, text answer| B
-    ...
 ```
