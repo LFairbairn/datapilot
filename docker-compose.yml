@@ -1,0 +1,31 @@
+services:
+  ollama:
+    image: ollama/ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_models:/root/.ollama
+
+  mcp_server:
+    build: ./mcp_server
+    ports:
+      - "8000:8000"
+    volumes:
+      - shared_data:/app/data
+
+  streamlit:
+    build: ./streamlit_app
+    ports:
+      - "8501:8501"
+    environment:
+      - MCP_SERVER_URL=http://mcp_server:8000/sse
+      - OLLAMA_URL=http://ollama:11434
+    volumes:
+      - shared_data:/app/data
+    depends_on:
+      - ollama
+      - mcp_server
+
+volumes:
+  ollama_models:
+  shared_data:

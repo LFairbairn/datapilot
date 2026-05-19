@@ -1,0 +1,29 @@
+[project]
+name = "datapilot"
+version = "0.1.0"
+description = "A locally-running AI data analysis tool using MCP and Ollama"
+requires-python = ">=3.11"
+dependencies = [
+    "mcp>=1.0.0",
+    "streamlit>=1.35.0",
+    "pandas>=2.2.0",
+    "plotly>=5.22.0",
+    "httpx>=0.27.0",
+    "taskipy>=1.13.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.23.0",
+]
+
+[tool.taskipy.tasks]
+mcp     = "python mcp_server/src/server.py"
+ui      = "streamlit run streamlit_app/src/app.py"
+test    = "pytest tests/ -v"
+up      = "docker compose up --build"
+down    = "docker compose down"
+
+[tool.uv]
+package = false
