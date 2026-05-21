@@ -21,7 +21,7 @@ def load_csv(file_path: str) -> str:
 def query_data(expression: str) -> str:
     """
     Query the loaded DataFrame using a pandas query expression.
-    Example expressions: "Age == 'Adult'", "Running == True", "Primary Fur Color == 'Gray'"
+    Example expressions: "Age == 'Adult'", "Running == True", "`Primary Fur Color` == 'Gray'"
     """
     if _df is None:
         return "Error: no CSV loaded. Call load_csv first."
@@ -29,6 +29,12 @@ def query_data(expression: str) -> str:
         result = _df.query(expression)
         if result.empty:
             return "No rows matched that query."
-        return f"{len(result)} rows matched:\n{result.to_string(index=False, max_rows=20)}"
+        return (
+            f"{len(result)} rows matched:\n{result.to_string(index=False, max_rows=20)}"
+        )
     except Exception as e:
-        return f"Error running query: {e}"
+        return (
+            f"Error running query: {e}. "
+            "Column names with spaces must be wrapped in backticks, "
+            "e.g. `Primary Fur Color` == 'Gray'."
+        )

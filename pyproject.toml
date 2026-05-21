@@ -16,6 +16,7 @@ dependencies = [
 dev = [
     "pytest>=8.0.0",
     "pytest-asyncio>=0.23.0",
+    "black>=26.5.1",
 ]
 
 [tool.taskipy.tasks]
@@ -24,6 +25,7 @@ ui      = "streamlit run streamlit_app/src/app.py"
 test    = "pytest tests/ -v"
 up      = "docker compose up --build"
 down    = "docker compose down"
+lint    = "black ."
 
 [tool.uv]
 package = false

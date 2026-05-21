@@ -50,6 +50,11 @@ datapilot/
     └── sample_sales.csv        # sample data for development
 ```
 
+## Prerequisites
+
+> **Note:** Ollama should be installed natively on your machine rather than through Docker, especially on Apple Silicon (M1/M2/M3) Macs where native performance is significantly better.
+> Full setup instructions to be added once the project is running end-to-end.
+
 ## Service Architecture
 
 Three Docker services defined in `docker-compose.yml`:

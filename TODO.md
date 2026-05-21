@@ -8,6 +8,7 @@
 - [x] Create `docker-compose.yml` with ollama, mcp_server, and streamlit services
 - [x] Create `mcp_server/Dockerfile`
 - [x] Create `streamlit_app/Dockerfile`
+- [ ] Run MCP server and Streamlit via Docker instead of locally
 
 ## MCP Server
 - [x] Create `mcp_server/src/server.py` — MCP server entry point
@@ -16,6 +17,7 @@
 
 ## Streamlit UI
 - [x] Create `streamlit_app/src/app.py` — Streamlit UI
+- [ ] Add welcome message to Streamlit UI prompting user to upload a CSV 
 
 ## Tests & CI
 - [ ] Create `tests/test_csv_tools.py`
@@ -24,3 +26,4 @@
 
 ## README
 - [ ] Write How to Run section once project is working end-to-end
+

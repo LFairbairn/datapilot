@@ -10,10 +10,11 @@ from mcp.client.sse import sse_client
 MCP_SERVER_URL = os.getenv("MCP_SERVER_URL", "http://localhost:8000/sse")
 OLLAMA_URL = os.getenv("OLLAMA_URL", "http://localhost:11434")
 MODEL = "llama3.1"
-DATA_DIR = "/app/data"
+DATA_DIR = os.getenv("DATA_DIR", "data")
 
 
 # --- MCP helpers ---
+
 
 async def get_mcp_tools() -> list[dict]:
     """Fetch available tools from the MCP server and convert to Ollama format."""
@@ -44,6 +45,7 @@ async def call_mcp_tool(name: str, arguments: dict) -> str:
 
 
 # --- Ollama helpers ---
+
 
 async def run_conversation(messages: list[dict], tools: list[dict]) -> list[dict]:
     """
@@ -78,6 +80,7 @@ async def run_conversation(messages: list[dict], tools: list[dict]) -> list[dict
 
 # --- Streamlit UI ---
 
+
 def main():
     st.title("DataPilot")
     st.caption("Upload a CSV and ask questions about your data")
@@ -93,22 +96,28 @@ def main():
                 f.write(uploaded_file.getbuffer())
             result = asyncio.run(call_mcp_tool("load_csv", {"file_path": save_path}))
             st.session_state.csv_path = save_path
-            st.session_state.messages = []
+            st.session_state.messages = [
+                {
+                    "role": "system",
+                    "content": "You are a data analyst providing insights into data in a friendly and professional way. "
+                    "Your goal is to answer users questions about contents of a csv file, "
+                    "summerise results concisely rather than listing every row and do not return raw JSON, use plain english. "
+                    "If you do not know the answer, or the answer is not present in the data, "
+                    "state 'I am not sure' rather than making up information. "
+                    "Do not discuss any other topic other than what is contained within the csv file.",
+                }
+            ]
             st.success(result)
+            st.session_state.messages.append({"role": "system", "content": result})
 
-    # Chat history
-    if "messages" not in st.session_state:
-        st.session_state.messages = []
+    if not st.session_state.get("csv_path"):
+        st.info("Upload a CSV file above to get started.")
+        return
 
     for msg in st.session_state.messages:
         if msg["role"] in ("user", "assistant"):
             with st.chat_message(msg["role"]):
                 st.write(msg["content"])
-
-    # Chat input
-    if not st.session_state.get("csv_path"):
-        st.info("Upload a CSV file above to get started.")
-        return
 
     if prompt := st.chat_input("Ask a question about your data..."):
         st.session_state.messages.append({"role": "user", "content": prompt})
