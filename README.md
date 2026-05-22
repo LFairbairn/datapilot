@@ -54,6 +54,7 @@ datapilot/
 
 > **Note:** Ollama should be installed natively on your machine rather than through Docker, especially on Apple Silicon (M1/M2/M3) Macs where native performance is significantly better.
 > Full setup instructions to be added once the project is running end-to-end.
+> "We kept Ollama native on macOS because Docker's Linux VM layer prevents it from accessing Apple Silicon's GPU, which would make inference unacceptably slow."
 
 ## Service Architecture
 
