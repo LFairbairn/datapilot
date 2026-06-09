@@ -17,6 +17,7 @@ dev = [
     "pytest>=8.0.0",
     "pytest-asyncio>=0.23.0",
     "black>=26.5.1",
+    "pytest-cov>=7.1.0",
 ]
 
 [tool.taskipy.tasks]
@@ -26,6 +27,9 @@ test    = "pytest tests/ -v"
 up      = "docker compose up --build"
 down    = "docker compose down"
 lint    = "black ."
+
+[tool.black]
+target-version = ["py312"]
 
 [tool.uv]
 package = false

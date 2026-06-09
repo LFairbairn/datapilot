@@ -72,3 +72,12 @@ def test_query_data_with_invalid_expression(loaded_csv):
     result = csv_tools.query_data("!!!!!")
 
     assert "Error" in result
+
+
+# Test 6
+# Call query_data that returns no matches
+def test_query_data_with_no_matching_rows(loaded_csv):
+    # Call query with no matching rows
+    result = csv_tools.query_data("colour == 'Purple'")
+
+    assert "No rows matched that query." in result
