@@ -1,5 +1,10 @@
 # DataPilot
 
+[![CI](https://github.com/LFairbairn/datapilot/actions/workflows/ci.yml/badge.svg)](https://github.com/LFairbairn/datapilot/actions/workflows/ci.yml)
+![Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen)
+
+
+
 A locally-running AI data analysis tool. Users upload a CSV file via a Streamlit UI and ask an LLM (Ollama) questions about the data. Built using the Model Context Protocol (MCP) to connect the LLM to data tools.
 
 ## Project Goals
