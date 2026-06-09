@@ -83,7 +83,14 @@ async def run_conversation(messages: list[dict], tools: list[dict]) -> list[dict
 
 def main():
     st.title("DataPilot")
-    st.caption("Upload a CSV and ask questions about your data")
+    st.markdown("""
+    Hi, welcome to DataPilot! To get started please upload a csv for me to look at.
+                
+    Here are some things you can ask:
+    - How many x's were observed in (month) in this dataset?
+    - How many x's are recorded in this dataset?
+    - What is the most recorded sale item in this dataset? 
+    """)
 
     # File upload
     uploaded_file = st.file_uploader("Upload a CSV file", type="csv")
@@ -121,6 +128,8 @@ def main():
 
     if prompt := st.chat_input("Ask a question about your data..."):
         st.session_state.messages.append({"role": "user", "content": prompt})
+        with st.chat_message("user"):
+            st.write(prompt)
 
         with st.spinner("Thinking..."):
             tools = asyncio.run(get_mcp_tools())

@@ -16,7 +16,6 @@ A locally-running AI data analysis tool. Users upload a CSV file via a Streamlit
 - **MCP** — protocol connecting Ollama to data tools
 - **Streamlit** — user interface
 - **pandas** — CSV parsing and data manipulation
-- **Plotly** — chart generation
 - **Taskipy** — task shortcuts via `pyproject.toml`
 - **Docker + Docker Compose** — containerisation and service orchestration
 - **Pytest** — testing
@@ -37,15 +36,13 @@ datapilot/
 │   └── src/
 │       ├── server.py
 │       └── tools/
-│           ├── csv_tools.py    # load_csv, query_data tools
-│           └── chart_tools.py  # make_chart tool (later phase)
+│           └── csv_tools.py    # load_csv, query_data tools
 ├── streamlit_app/              # UI service
 │   ├── Dockerfile
 │   └── src/
 │       └── app.py
 ├── tests/
-│   ├── test_csv_tools.py
-│   └── test_chart_tools.py
+│   └── test_csv_tools.py
 └── data/
     └── sample_sales.csv        # sample data for development
 ```
@@ -58,28 +55,27 @@ datapilot/
 
 ## Service Architecture
 
-Three Docker services defined in `docker-compose.yml`:
+Two services run in Docker Compose; Ollama runs natively on the host.
 
-- `ollama` — LLM server, official image, models persisted via named volume
-- `mcp_server` — Python MCP server exposing CSV and chart tools
-- `streamlit` — Streamlit UI, communicates with mcp_server and ollama
+| Service      | Runs in Docker | URL                           |
+|--------------|----------------|-------------------------------|
+| MCP Server   | Yes            | `http://localhost:8000/sse`   |
+| Streamlit    | Yes            | `http://localhost:8501`       |
+| Ollama       | No (native)    | `http://localhost:11434`      |
 
-Services communicate by service name on the Docker network (e.g. `http://ollama:11434`).
+Ollama runs natively rather than in Docker because Docker's Linux VM layer prevents it from accessing Apple Silicon's GPU, which makes inference unacceptably slow on M1/M2/M3 Macs.
 
-| Service      | Internal URL                      | External (host) URL           |
-|--------------|-----------------------------------|-------------------------------|
-| Ollama       | `http://ollama:11434`             | `http://localhost:11434`      |
-| MCP Server   | `http://mcp_server:8000/sse`      | `http://localhost:8000/sse`   |
-| Streamlit    | `http://streamlit:8501`           | `http://localhost:8501`       |
-
-The MCP server uses SSE (Server-Sent Events) transport — Streamlit connects to it at `http://mcp_server:8000/sse`.
+The MCP server uses SSE (Server-Sent Events) transport. Streamlit reaches it at `http://mcp_server:8000/sse` inside the Docker network, and reaches Ollama at `http://host.docker.internal:11434`.
 
 ```mermaid
 flowchart LR
-    A[User] -->|upload CSV, message| B(Streamlit)
-    B --> |user message, tool| C(Ollama)
-    B --> |request/execute tool| D(MCP)
-    D --> |tool definition| B
-    D --> |tool results| B
-    C --> |tool call, text answer| B
+    A[User] -->|upload CSV, chat| B
+
+    subgraph Docker Compose
+        B(Streamlit)
+        D(MCP Server)
+    end
+
+    B <-->|SSE — tools| D
+    B <-->|HTTP — chat| C[Ollama\nnative on host]
 ```
