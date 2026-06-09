@@ -19,9 +19,9 @@
 - [x] Add welcome message to Streamlit UI prompting user to upload a CSV
 
 ## Tests & CI
-- [ ] Create `tests/test_csv_tools.py`
-- [ ] Create `.github/workflows/ci.yml` — GitHub Actions CI
+- [x] Create `tests/test_csv_tools.py`
+- [x] Create `.github/workflows/ci.yml` — GitHub Actions CI
 
 ## README
-- [ ] Write How to Run section once project is working end-to-end
+- [x] Write How to Run section once project is working end-to-end
 

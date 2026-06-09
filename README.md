@@ -3,15 +3,17 @@
 [![CI](https://github.com/LFairbairn/datapilot/actions/workflows/ci.yml/badge.svg)](https://github.com/LFairbairn/datapilot/actions/workflows/ci.yml)
 ![Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen)
 
-
-
 A locally-running AI data analysis tool. Users upload a CSV file via a Streamlit UI and ask an LLM (Ollama) questions about the data. Built using the Model Context Protocol (MCP) to connect the LLM to data tools.
+
+---
 
 ## Project Goals
 
 - Learn MCP server architecture
 - Build a working local LLM pipeline
 - Portfolio project — prioritise understanding over speed
+
+---
 
 ## Tech Stack
 
@@ -25,6 +27,8 @@ A locally-running AI data analysis tool. Users upload a CSV file via a Streamlit
 - **Docker + Docker Compose** — containerisation and service orchestration
 - **Pytest** — testing
 - **GitHub Actions** — CI
+
+---
 
 ## Project Structure
 
@@ -52,11 +56,42 @@ datapilot/
     └── sample_sales.csv        # sample data for development
 ```
 
-## Prerequisites
+---
 
+## Getting Started
+
+**Prerequisites:**
 > **Note:** Ollama should be installed natively on your machine rather than through Docker, especially on Apple Silicon (M1/M2/M3) Macs where native performance is significantly better.
-> Full setup instructions to be added once the project is running end-to-end.
-> "We kept Ollama native on macOS because Docker's Linux VM layer prevents it from accessing Apple Silicon's GPU, which would make inference unacceptably slow."
+
+- Docker and Docker Compose
+- Ollama (installed natively)
+- llama3.1 model pulled (`ollama pull llama3.1`)
+
+---
+
+## How to Run
+```bash
+git clone https://github.com/LFairbairn/datapilot.git
+cd datapilot
+docker compose up --build
+```
+
+Open [http://localhost:8501](http://localhost:8501) in your browser
+
+---
+
+## Screenshots
+
+### Welcome screen
+![Welcome screen](screenshots/welcome.png)
+
+### CSV uploaded
+![CSV uploaded](screenshots/csv_uploaded.png)
+
+### Chat example
+![Chat example](screenshots/chat.png)
+
+---
 
 ## Service Architecture
 
